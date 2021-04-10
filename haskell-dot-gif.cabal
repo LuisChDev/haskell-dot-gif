@@ -22,6 +22,11 @@ source-repository head
 common common-options
   build-depends:       base ^>= 4.13.0.0
                      , relude
+                     , Yampa
+                     , colour >= 2.3
+                     , diagrams
+                     , diagrams-lib
+                     , diagrams-cairo
   
   mixins:              base hiding (Prelude)
                      , relude (Relude as Prelude)

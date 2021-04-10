@@ -1,7 +1,7 @@
 module Main (main) where
 
-import HaskellDotGif (someFunc)
+import HaskellDotGif (animate)
 
 
 main :: IO ()
-main = someFunc
+main = animate
