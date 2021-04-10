@@ -21,12 +21,12 @@ source-repository head
   location:            https://github.com/LuisChDev/haskell-dot-gif.git
 common common-options
   build-depends:       base ^>= 4.13.0.0
-                     , relude
-                     , Yampa
+                     , relude >= 0.7
+                     , Yampa >= 0.13
                      , colour >= 2.3
-                     , diagrams
-                     , diagrams-lib
-                     , diagrams-cairo
+                     , diagrams >= 1.4
+                     , diagrams-lib >= 1.4
+                     , diagrams-cairo >= 1.4
   
   mixins:              base hiding (Prelude)
                      , relude (Relude as Prelude)
