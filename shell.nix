@@ -5,5 +5,6 @@ with import (import ./nix/sources.nix).nixpkgs {};
     cabal-install
     cabal2nix
     niv
+    z3
   ];
 })

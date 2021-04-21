@@ -22,14 +22,24 @@ source-repository head
 common common-options
   build-depends:       base ^>= 4.13.0.0
                      , relude >= 0.7
+                     , vector >= 0.12
+                     , text >= 1.2
                      , Yampa >= 0.13
                      , colour >= 2.3
                      , diagrams >= 1.4
                      , diagrams-lib >= 1.4
                      , diagrams-cairo >= 1.4
+                     , refined
+                     , filepath >= 1.4
+                     , parsec >= 3.1
+                     , matrix
+                     , fgl
   
   mixins:              base hiding (Prelude)
-                     , relude (Relude as Prelude)
+                     , relude (Relude as Prelude,
+                       Relude.Unsafe)
+
+  default-extensions:  OverloadedStrings
   ghc-options:         -Wall
                        -Wcompat
                        -Widentities
@@ -50,6 +60,11 @@ library
   import:              common-options
   hs-source-dirs:      src
   exposed-modules:     HaskellDotGif
+                     , Control.Logic
+                     , Control.Logic.Rainfall
+                     , Control.Logic.Bridges
+                     , Control.Logic.DeadEnd
+                     , Exercises
 executable haskell-dot-gif
   import:              common-options
   hs-source-dirs:      app
