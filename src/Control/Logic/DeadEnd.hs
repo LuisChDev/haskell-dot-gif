@@ -1,7 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ViewPatterns #-}
 module DeadEnd where
 
-import Prelude as P
+import Prelude as P hiding (head)
 
 import qualified Data.Sequence as SQ
 
@@ -16,7 +17,7 @@ import Data.Graph.Inductive.Query.DFS (components)
 import Data.Graph.Inductive.PatriciaTree
 import Data.List (delete)
 
-
+import Relude.Unsafe (head)
 
 type Streets = Matrix Bool -- si los componentes i,j están conectados o no
 type Grafo = UGr
@@ -96,12 +97,26 @@ areInLoop grf = filter inALoop (nodes grf)
     isLoop' recr seen frm dst =
       any (\x -> recr (frm SQ.<| seen) x dst) (neighbors grf frm)
 
+-- | otra versión del algoritmo.
+inALoop :: Grafo -> [Node]
+inALoop grf = nodes $ fst $ flip runState grf remove
+  where
+    remove = do
+      curGrf <- get
+      let newGrf = nfilter (\nde -> length (out curGrf nde) >= 2) curGrf
+        in if newGrf == curGrf
+        then pure newGrf
+        else do
+        put newGrf
+        remove
+
 -- | luego, recorremos la lista de grafos obtenida anteriormente, verificamos
 -- si hay vecinos que NO estén en la lista, y anotamos el camino como un
 -- callejón sin salida.
 sinSalida :: Grafo -> [Node] -> [Camino]
+sinSalida grf [] = [ (leaf, head $ suc grf leaf) | leaf <- nodes $ nfilter (\x -> length (suc grf x) == 1) grf]
 sinSalida grf lops = join $ fmap (
-  \nod -> [(nod, x) | x <- filter (\y -> elem y lops) (neighbors grf nod)]) lops
+  \nod -> [(nod, x) | x <- filter (\y -> not (elem y lops)) (neighbors grf nod)]) lops
 
 -- | generamos el documento de salida a partir de la lista de caminos generados
 -- con anterioridad.
@@ -119,4 +134,4 @@ main = do
     Right matr -> let
       graphs = (flip subgraph matr) <$> (components matr)
       in mapM_ (\grph -> putStrLn $
-                 printSinSal $ sinSalida grph $ areInLoop grph) graphs
+                 printSinSal $ sinSalida grph $ inALoop grph) graphs
