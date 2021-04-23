@@ -1,6 +1,10 @@
 {-# LANGUAGE FlexibleContexts #-}
 module DeadEnd where
 
+import Prelude as P
+
+import qualified Data.Sequence as SQ
+
 import Data.Matrix hiding (trace)
 import Text.Parsec hiding (State)
 import Text.Parsec.Text (Parser)
@@ -8,9 +12,11 @@ import Relude.Unsafe (read)
 import Data.Text (pack, unpack)
 
 import Data.Graph.Inductive.Graph
-
+import Data.Graph.Inductive.Query.DFS (components)
 import Data.Graph.Inductive.PatriciaTree
 import Data.List (delete)
+
+
 
 type Streets = Matrix Bool -- si los componentes i,j están conectados o no
 type Grafo = UGr
@@ -74,6 +80,21 @@ loops grf = filter anyLoop (nodes grf)
         trace (show sen) $ pure False
         anyM (recr grf dst) (neighbors grf frm)
 
+-- | versión alternativa de búsqueda de ciclos, de forma pura.
+areInLoop :: Grafo -> [Node]
+areInLoop grf = filter inALoop (nodes grf)
+  where
+    inALoop :: Node -> Bool
+    inALoop nde = any (isLoop SQ.empty nde) (delete nde $ nodes grf)
+    isLoop seen frm dst
+      | frm == dst && (length seen > 1) =
+        backtrip (SQ.deleteAt (length seen - 1) seen) dst frm
+    isLoop seen frm dst = isLoop' isLoop seen frm dst
+    backtrip    _ frm dst | frm == dst = True
+    backtrip seen frm dst = isLoop' backtrip seen frm dst
+    isLoop'    _ seen frm   _ | frm `elem` seen = False
+    isLoop' recr seen frm dst =
+      any (\x -> recr (frm SQ.<| seen) x dst) (neighbors grf frm)
 
 -- | luego, recorremos la lista de grafos obtenida anteriormente, verificamos
 -- si hay vecinos que NO estén en la lista, y anotamos el camino como un
@@ -95,4 +116,7 @@ main = do
   content <- readFileText $ unpack nameFile
   case parse parseInp "" content of
     Left err -> fail $ "too bad! " <> show err
-    Right matr -> putStrLn $ printSinSal $ sinSalida matr $ loops matr
+    Right matr -> let
+      graphs = (flip subgraph matr) <$> (components matr)
+      in mapM_ (\grph -> putStrLn $
+                 printSinSal $ sinSalida grph $ areInLoop grph) graphs
