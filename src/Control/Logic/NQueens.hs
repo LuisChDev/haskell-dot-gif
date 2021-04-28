@@ -35,18 +35,12 @@ nQueen n qns = do
 
 -- | crea todos los posibles tableros
 tableros :: Int -> [[Pos]]
-tableros n = tableros' []
+tableros n = tableros' 1 []
   where
-    tableros' :: [Pos] -> [[Pos]]
-    tableros' qns = do
-      qn <- [(x, y) | x <- [1 .. n], y <- [1 .. n]]
+    tableros' :: Int -> [Pos] -> [[Pos]]
+    tableros' m qns = do
+      qn <- [(m, y) | y <- [1 .. n]]
       guard $ isValid n qn qns
       if length qns == (n - 1)
         then pure $ qns ++ [qn]
-        else tableros' $ qns ++ [qn]
-
--- | elimina las permutaciones de una lista.
-rmPerm :: (Eq a) => [[a]] -> [[a]]
-rmPerm [] = []
-rmPerm (x:[]) = [x]
-rmPerm (x:ys) = rmPerm $ x : (filter (`elem` permutations x) ys)
+        else tableros' (m + 1) $ qns ++ [qn]
