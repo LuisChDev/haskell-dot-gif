@@ -65,6 +65,7 @@ library
                      , Control.Logic.Rainfall
                      , Control.Logic.Bridges
                      , Control.Logic.DeadEnd
+                     , Control.Logic.NQueens
                      , Exercises
 executable haskell-dot-gif
   import:              common-options
