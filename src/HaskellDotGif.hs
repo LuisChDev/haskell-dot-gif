@@ -3,7 +3,7 @@ Copyright: (c) 2021 Luis Chavarriaga
 SPDX-License-Identifier: MIT
 Maintainer: Luis Chavarriaga <luischa123@gmail.com>
 
-Este repositorio demuestra algunas técnicas para la animcaación usando Haskell y FRP
+Este repositorio demuestra algunas técnicas para la animación usando Haskell y FRP
 -}
 
 {-# LANGUAGE OverloadedStrings #-}
@@ -23,8 +23,14 @@ import Data.Fixed (mod')
 
 animate :: IO ()
 animate = do
-  putTextLn "animate"
-  mainWith $ take 120 $ frames rainbow
+  putTextLn $ "escoge un dibujo:\n \"1\" para rotación,\n" <>
+    "\"2\" para órbita,\n" <>
+    "\"3\" para arco iris"
+  choice <- getLine
+  case choice of
+    "1" -> mainWith $ take 120 $ frames rotatin
+    "2" -> mainWith $ take 120 $ frames orbit
+    "3" -> mainWith $ take 120 $ frames rainbow
 
 
 -- |

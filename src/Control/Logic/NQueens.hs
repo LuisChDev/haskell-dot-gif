@@ -25,13 +25,13 @@ isValid n q (p:pss) = if q `elem` (takePos n p)
   then False
   else isValid n q pss
 
--- | genera todas las posibles posiciones de una reina y elimina las
---   imposibles.
-nQueen :: Int -> [Pos] -> [Pos]
-nQueen n qns = do
-  qnn <- [(x, y) | x <- [1..n], y <- [1..n]]
-  guard $ isValid n qnn qns
-  pure qnn
+-- -- | genera todas las posibles posiciones de una reina y elimina las
+-- --   imposibles.
+-- nQueen :: Int -> [Pos] -> [Pos]
+-- nQueen n qns = do
+--   qnn <- [(x, y) | x <- [1..n], y <- [1..n]]
+--   guard $ isValid n qnn qns
+--   pure qnn
 
 -- | crea todos los posibles tableros
 tableros :: Int -> [[Pos]]

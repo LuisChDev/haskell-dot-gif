@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ViewPatterns #-}
-module DeadEnd where
+module Control.Logic.DeadEnd where
 
 import Prelude as P hiding (head)
 

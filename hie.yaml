@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:haskell-dot-gif"
+    - path: "./app"
+      component: "exe:parallel"
+    - path: "./app2"
+      component: "exe:serial"
+    - path: "./test"
+      component: "test:haskell-dot-gif-test"

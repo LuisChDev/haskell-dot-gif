@@ -35,6 +35,7 @@ common common-options
                      , parsec >= 3.1
                      , matrix
                      , fgl
+                     , random >= 1.1
   
   mixins:              base hiding (Prelude)
                      , relude (Relude as Prelude,
@@ -66,15 +67,41 @@ library
                      , Control.Logic.Bridges
                      , Control.Logic.DeadEnd
                      , Control.Logic.NQueens
+                     , Control.Parallel
                      , Exercises
-executable haskell-dot-gif
+
+
+executable diagrams
   import:              common-options
   hs-source-dirs:      app
-  main-is:             Main.hs
+  main-is:             MainDiagrams.hs
   build-depends:       haskell-dot-gif
-  ghc-options:         -threaded
+  ghc-options:         
                        -rtsopts
                        -with-rtsopts=-N
+                       -threaded
+
+executable serial
+  import:              common-options
+  hs-source-dirs:      app
+  main-is:             MainSerial.hs
+  build-depends:       haskell-dot-gif
+  ghc-options:         
+                       -rtsopts
+                       -- -with-rtsopts=-N
+                       -- -threaded
+
+executable parallel
+  import:              common-options
+  hs-source-dirs:      app
+  main-is:             MainParallel.hs
+  build-depends:       haskell-dot-gif
+  ghc-options:         
+                       -rtsopts
+                       -with-rtsopts=-N
+                       -threaded
+
+
 test-suite haskell-dot-gif-test
   import:              common-options
   type:                exitcode-stdio-1.0

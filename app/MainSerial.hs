@@ -1,13 +1,11 @@
-{-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE PackageImports #-}
-module Main (main) where
+{-# LANGUAGE TypeApplications #-}
+module Main where
 
--- import HaskellDotGif (animate)
-import "haskell-dot-gif" Control.Parallel (qsort, qsort'')
+import "haskell-dot-gif" Control.Parallel
 import System.Random
 
 main :: IO ()
 main = do
   let lista = take 5000000 $ randoms @Int @StdGen $ mkStdGen 1000
   putTextLn $ show $ fromMaybe 0 $ viaNonEmpty last $ qsort lista
--- main = animate

@@ -1,4 +1,4 @@
-module Bridges () where
+module Control.Logic.Bridges () where
 
 -- import Text.ParserCombinators.ReadP
 import Text.Parsec as P
@@ -41,11 +41,6 @@ enteros c = count c $ do
   satisfy (== ' ')
   pure $ read int
 
-
--- | parsea el documento de entrada de datos.
-input :: Parser ((Int, Int, Int, Int), (Seq Coord))
-input = do
-  _
 
 -- -- -- --
 -- lógica.
