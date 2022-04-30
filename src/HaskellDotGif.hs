@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 Maintainer: Luis Chavarriaga <luischa123@gmail.com>
 
 Este repositorio demuestra algunas técnicas para la animación usando Haskell y FRP
--}
+ -}
 
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE  Arrows #-}
