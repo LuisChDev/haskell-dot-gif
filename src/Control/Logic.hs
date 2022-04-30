@@ -1,11 +1,12 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE DerivingStrategies #-}
 
-module Control.Logic (
-  solucion
-  ) where
+module Control.Logic
+  ( solucion
+  )
+where
 
-import qualified Text.Show as TS
+import qualified Text.Show                     as TS
 
 {- En una tribu remota, los menores de edad sólo dicen la verdad, y los
 mayores siempre alternan entre decir la verdad y mentir.
@@ -35,10 +36,18 @@ data Answer = Answer
 
 instance Show Answer where
   show Answer { alicia, beto, carlos, carlosDice } =
-    "Alicia es " <> show alicia <> " de edad\n" <>
-    "Beto es " <> show beto <> " de edad\n" <>
-    "Carlos es " <> show carlos <> " de edad\n" <>
-    "Carlos dice ser " <> show carlosDice <> "\n"
+    "Alicia es "
+      <> show alicia
+      <> " de edad\n"
+      <> "Beto es "
+      <> show beto
+      <> " de edad\n"
+      <> "Carlos es "
+      <> show carlos
+      <> " de edad\n"
+      <> "Carlos dice ser "
+      <> show carlosDice
+      <> "\n"
 
 -- Ahora las reglas.
 -- Cada regla lógica se puede representar como una función.
@@ -68,17 +77,30 @@ aliciaDiceValido _     _     = True
 betoDiceValido :: Age -> Age -> Age -> Bool
 betoDiceValido eBeto eCarlos eCarDi = case (eBeto, eCarlos, eCarDi) of
   (Menor, Mayor, Menor) -> True
-  (Mayor, _,     Menor) -> True
+  (Mayor, _    , Menor) -> True
   _                     -> False
 
 {- Para ejecutar el programa, se usa la mónada de lista.
 
--}
+   Esta mónada es equivalente en funcionalidad a una comprensión de lista: por
+   cada variable generada, se multiplica el número de posibles valores
+   resultantes en la lista final, por el número de valores posibles para la
+   variable. El resultado es todos los posibles valores que puede asumir una
+   solución al problema (i.e., el espacio de soluciones). El resto del ejercicio
+   consiste en descartar las soluciones inválidas, de modo que se retorne la
+   lista de soluciones correctas.
+
+   este método (por "fuerza bruta") es ineficiente al generar todo el espacio de
+   soluciones (si bien es cierto que la evaluación no-estricta puede reducir el
+   número). La esencia del problema es una búsqueda en un espacio de soluciones
+   y podría aventajarse del uso de heurísticas de búsqueda u otros métodos
+   estadísticos modernos.
+ -}
 solucion :: [Answer]
 solucion = do
-  edadAlicia <- [Mayor, Menor]
-  edadBeto <- [Mayor, Menor]
-  edadCarlos <- [Mayor, Menor]
+  edadAlicia     <- [Mayor, Menor]
+  edadBeto       <- [Mayor, Menor]
+  edadCarlos     <- [Mayor, Menor]
   edadCarlosDice <- [Mayor, Menor]
   -- la expresión "guard a" toma un valor de verdad y cancela el resto
   -- del cálculo si es falso. Simplemente secuenciando todas las guardas
@@ -89,9 +111,8 @@ solucion = do
   guard $ betoDiceValido edadBeto edadCarlos edadCarlosDice
   -- se retorna la solución. Hay que tener en cuenta que si existe más de
   -- una, se retornan en lista.
-  return $ Answer
-    { alicia = edadAlicia,
-      beto = edadBeto,
-      carlos = edadCarlos,
-      carlosDice = edadCarlosDice
-    }
+  return $ Answer { alicia     = edadAlicia
+                  , beto       = edadBeto
+                  , carlos     = edadCarlos
+                  , carlosDice = edadCarlosDice
+                  }
